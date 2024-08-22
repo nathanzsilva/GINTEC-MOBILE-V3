@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "appgintec",
-    "slug": "appgintec",
+    "slug": "newgintec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,16 +12,35 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.yourcompany.yourappname",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.yourcompany.yourappname",
+      "versionCode": 1
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "permissions": [
+      "android.permission.CAMERA",
+      "android.permission.RECORD_AUDIO"
+    ],
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#ffffff"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "485c237b-b0db-476e-9246-3f2ad2cb5505"
+      }
     }
-  }
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "1fc8f0f6-49f2-42af-bddb-cc0e1ac94f16"
+    }
+  },
+  "owner": "osgays"
 }
