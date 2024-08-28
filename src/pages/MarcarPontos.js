@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Text, TouchableOpacity, View, Modal, TextInput, Button, StyleSheet, Pressable } from 'react-native';
+import { Image, Text, TouchableOpacity, View, Modal, TextInput, Button, StyleSheet, Pressable, Alert } from 'react-native';
 import styles from '../utils/styles';
 import httpClient from '../services/api';
 
@@ -12,6 +12,29 @@ const MarcarPontos = ({ navigation }) => {
         try {
             httpClient.post("/Atividade/MarcarPontos2", {
                 token: rm,
+            }).then((response) => {                
+                if (response.data.error == "Usuario não encontrado")
+                    Alert.alert(
+                        'Usuário não encontrado!',
+                        'Verifique se digitou o RM correto.',
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                else if (response.data.error == "Você já jogou este jogo/campeonato")
+                    Alert.alert(
+                        'Usuário já jogou esta atividade!',
+                        'o jogador já realizou esta atividade.',
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                else if (response.data?.usuarioCodigo != null) {
+                    Alert.alert(
+                        'Pontos validado com sucesso!',
+                        'Pontos validados com sucesso para ' + response.data.usuario.nome + ".",
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                }
             })
         }
         catch (error) {

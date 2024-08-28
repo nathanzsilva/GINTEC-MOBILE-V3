@@ -13,14 +13,16 @@ const Login = ({ navigation }) => {
   const [passwordValidate, setPasswordValidate] = useState(false);
 
   useEffect(() => {
-    //handleAutoLogin();
+    handleAutoLogin();
   }, []);
 
   const handleAutoLogin = async () => {
-    setLoading(true);
     var email = await AsyncStorage.getItem("email");
     var password = await AsyncStorage.getItem("password");
-
+    
+    if(!email || !password)
+      return;
+    setLoading(true);
     if (email && password) {
       httpClient.post('/Auth', {
         email: email,

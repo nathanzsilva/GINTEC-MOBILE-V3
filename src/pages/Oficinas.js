@@ -3,63 +3,96 @@ import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from
 import httpClient from "../services/api";
 
 const Oficinas = ({ navigation }) => {
-    const [isPendente, setIsPendente] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [activities, setActivities] = useState([]);
+    const [workshopsDates, setWorkshopsDates] = useState([]);
+    const [workshops, setWorkshops] = useState([]);
+    const [workshopsFilter, setWorkshopsFilter] = useState([]);
+    const [selectedDate, setSelectedDate] = useState("");
 
     useEffect(() => {
-        handleGetActivities()
+        handleGetWorkshops()
     }, [])
+    useEffect(() => {
+        const currentDate = new Date(selectedDate) ?? new Date();
+        setWorkshopsFilter(workshops.filter(x => {
+            const gincanaDate = new Date(x.data);
+            return gincanaDate.getFullYear() === currentDate.getFullYear() &&
+                gincanaDate.getMonth() === currentDate.getMonth() &&
+                gincanaDate.getDate() === currentDate.getDate();
+        }))
 
-    const handleGetActivities = async () => {
-        httpClient.get("/Atividade/AtividadesFeitas").then((response) => {
-            setActivities(response.data);
+
+    }, [selectedDate])
+
+    const handleGetWorkshops = async () => {
+        httpClient.get("/Oficina").then((response) => {
+            const uniqueDates = new Set();  
+
+            response.data.forEach(item => {
+                if (item.data) {
+                    uniqueDates.add(item.data);
+                }
+            });
+            setWorkshopsDates(Array.from(uniqueDates.keys()));
+            var date = response.data.find(x => {
+                var currentDate = new Date();
+                var date = new Date(x.data)
+                return date.getFullYear() === currentDate.getFullYear() &&
+                    date.getMonth() === currentDate.getMonth() &&
+                    date.getDate() === currentDate.getDate();
+            }).data
+
+            setWorkshopsFilter(response.data.filter(x => {
+                var currentDate = date ? new Date(date) : new Date();
+                var date = new Date(x.data)
+                return date.getFullYear() === currentDate.getFullYear() &&
+                    date.getMonth() === currentDate.getMonth() &&
+                    date.getDate() === currentDate.getDate();
+            }));
             setLoading(false)
         })
     }
 
-    const renderActivities = ({ item }) => {        
+    const renderworkshops = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => { navigation.navigate("Atividade", { atividade: item.descricao }) }}>
-                <View style={{ margin: 10, alignItems: "center", paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, flexDirection: "row", borderWidth: 1.75, borderColor: "#4C7EFF", justifyContent: "space-between" }}>
-                    <Text style={{ color: "#4C7EFF" }}>{item.descricao}</Text>
-                    <Image source={require("../../assets/botaoseta.png")} />
+            <TouchableOpacity onPress={() => { navigation.navigate("Oficina", { oficina: item.descricao, codigo: item.codigo, horarios: item.horariosFuncionamento }) }}>
+                <View style={{ margin: 10, alignItems: "center", paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, flexDirection: "row", borderWidth: 1.75, borderColor: "#00C1CF", justifyContent: "space-between" }}>
+                    <Text style={{ color: "#00C1CF" }}>{item.descricao}</Text>
+                    <Image source={require("../../assets/botaosetaazul.png")} />
                 </View>
             </TouchableOpacity >
         )
     };
+    const renderDataWorkShops = ({ item }) => {
+        var date = new Date(item);
+        return (
+            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+                <Text style={{ ...styles.buttonText2, color: "#005C6D" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
+            </TouchableOpacity>
+        )
+    };
     return (
-        <View style={{ paddingTop: 80 , backgroundColor: "#fff", flex: 1}}>
+        <View style={{ paddingTop: 80, backgroundColor: "#fff", flex: 1 }}>
             <TouchableOpacity onPress={() => { navigation.navigate("FichaPessoal") }}>
                 <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
             </TouchableOpacity>
-            <Text style={{ ...styles.title2, marginTop: 30 }}>Ficha de Oficinas</Text>
-            {isPendente ?
-                <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
-                    <TouchableOpacity style={{ ...styles.button2, backgroundColor: "#FDD5D1" }}>
-                        <Text style={{ ...styles.buttonText2, color: "#7E0000" }}>Pendentes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button2 }} onPress={() => { setIsPendente(!isPendente) }}>
-                        <Text style={{ ...styles.buttonText2, color: "#DADADA" }}>Concluído</Text>
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
-                    <TouchableOpacity style={{ ...styles.button2 }} onPress={() => { setIsPendente(!isPendente) }}>
-                        <Text style={{ ...styles.buttonText2, color: "#DADADA" }}>Pendentes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button2, backgroundColor: "#E8FBE4" }}>
-                        <Text style={{ ...styles.buttonText2, color: "#3ACF1F" }}>Concluído</Text>
-                    </TouchableOpacity>
-                </View>
-            }
+            <Text style={{ ...styles.title2, marginTop: 30 }}>Oficinas</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
+                <FlatList
+                    contentContainerStyle={{ justifyContent: "space-evenly", width: "100%" }}
+                    horizontal={true}
+                    data={workshopsDates}
+                    renderItem={renderDataWorkShops}
+                />
+            </View>
+
             {
                 loading ? (
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 200 }} />
-                ) : activities.filter(x => x.isRealizada == !isPendente).length > 0 ? (
+                ) : (workshopsFilter ?? []).length > 0 ? (
                     <FlatList
-                        data={activities.filter(x => x.isRealizada == !isPendente)}
-                        renderItem={renderActivities}
+                        data={workshopsFilter}
+                        renderItem={renderworkshops}
                         style={{ marginLeft: 25, marginTop: 20 }}
                     />
                 ) : (
@@ -73,5 +106,6 @@ const Oficinas = ({ navigation }) => {
         </View>
     )
 }
+
 
 export default Oficinas;

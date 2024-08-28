@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, ActivityIndicator, FlatList, TouchableOpacity, } from 'react-native';
+import { View, Image, Text, ActivityIndicator, TouchableOpacity, } from 'react-native';
 import styles from '../utils/styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FlatList } from 'react-native-gesture-handler';
 
 
 const Home = ({ navigation }) => {
@@ -13,9 +14,7 @@ const Home = ({ navigation }) => {
         handleGetRole();
         setTimeout(() => {
             setNotifications([{ title: "Campeonato de pátio", body: "Campeonato de pátio" }, { title: "Campeonato de pátio", body: "Campeonato de pátio" }, { title: "Campeonato de pátio", body: "Campeonato de pátio" }, { title: "Campeonato de pátio", body: "Campeonato de pátio" }, { title: "Campeonato de pátio", body: "Campeonato de pátio" }])
-            setLoading(false)
-
-            console.log("A ROLE É " + role)
+            setLoading(false)            
         }, 500);
     }, [])
 
@@ -23,7 +22,7 @@ const Home = ({ navigation }) => {
         var att = await AsyncStorage.getItem("atividadeCodigo");
         var camp = await AsyncStorage.getItem("campeonatoCodigo");
 
-        await setRole(att != "null" ? true : camp != "null"  ? true : false)
+        await setRole(att != "null" ? true : camp != "null" ? true : false)
     }
 
     const renderNotification = ({ item }) => (
@@ -37,9 +36,9 @@ const Home = ({ navigation }) => {
         </View>
     );
     return (
-        <View style={{ marginTop: 50 }}>
-            <View>
-                <Image source={require("../../assets/sinoAtivado.png")} style={{ alignSelf: 'flex-end', marginRight: 40 }} height={140} />
+        <View style={{ marginTop: 50, flex: 1 }}>
+            <View style={{height: 30}}>
+                {/* <Image source={require("../../assets/sinoAtivado.png")} style={{ alignSelf: 'flex-end', marginRight: 40 }} height={140} /> */}
             </View>
             <Text style={{ ...styles.title2, alignSelf: 'flex-start', marginLeft: 30, marginBottom: 30 }}>Olá, seja Bem-Vindo</Text>
             <View style={{ height: 270, display: "flex", flexDirection: "row" }}>
@@ -65,7 +64,9 @@ const Home = ({ navigation }) => {
                     <TouchableOpacity onPress={() => { navigation.navigate("Ranking") }}>
                         <Image source={require("../../assets/ranking.png")} />
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate("Perfil") }}>
                     <Image source={require("../../assets/perfil.png")} />
+                    </TouchableOpacity>
                 </View>
             </View>
             <Text style={{ ...styles.title2, alignSelf: 'flex-start', marginLeft: 30, marginBottom: 30 }}>Últimas notificações</Text>
@@ -74,14 +75,21 @@ const Home = ({ navigation }) => {
                 loading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
-                    <FlatList
+
+                    <FlatList scrollEnabled={true}
                         data={notifications}
                         renderItem={renderNotification}
-                        style={{ marginLeft: 25 }}
+                        style={{
+                            marginLeft: 25,
+                            paddingHorizontal: 25, height: "80px"
+                        }}
+                        contentContainerStyle={{
+                            paddingBottom: 50
+                        }}
                     />
+
                 )
             }
-
         </View >
     );
 };

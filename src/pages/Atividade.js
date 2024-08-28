@@ -22,7 +22,7 @@ const Atividade = ({ navigation, route }) => {
                         <Text style={{ fontSize: 15, color: "#3ACF1F" }}> 300</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={{ ...styles.button, marginTop: 35, width: 280 }}>
+                <TouchableOpacity style={{ ...styles.button, marginTop: 35, width: 280 }} onPress={() => {navigation.navigate("QrCode")}}>
                     <Text style={styles.buttonText}>Validar Atividade</Text>
                 </TouchableOpacity>
             </View>

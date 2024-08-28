@@ -17,6 +17,12 @@ import Oficinas from './src/pages/Oficinas';
 import Ranking from './src/pages/Ranking';
 import Scanner from './src/pages/Scanner';
 import MarcarPontos from './src/pages/MarcarPontos';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Campeonato from './src/pages/CampeonatoP';
+import CampeonatoP from './src/pages/CampeonatoP';
+import CampeonatoQ from './src/pages/CampeonatoQ';
+import Oficina from './src/pages/Oficina';
+import Perfil from './src/pages/Perfil';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,14 +43,14 @@ function MainTabNavigator() {
 
   return (
     <Tab.Navigator
-      initialRouteName='Home'      
+      initialRouteName='Home'
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === 'Home') {
-            return <Image source={require('./assets/home.png')}  />;
+            return <Image source={require('./assets/home.png')} />;
           } else if (route.name === 'QrCode') {
             return <Image source={require('./assets/qrCode.png')} />;
           } else if (route.name === 'FichaPessoal2') {
@@ -56,7 +62,7 @@ function MainTabNavigator() {
         tabBarStyle: { backgroundColor: '#fff' }, // Estilo do tab bar
       })}
     >
-      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
 
       <Tab.Screen name="FichaPessoal2" component={FichaPessoal} options={{ headerShown: false }} />
@@ -66,22 +72,28 @@ function MainTabNavigator() {
 }
 
 function App() {
-  return (    
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Logado" component={MainTabNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="FichaPessoal" component={FichaPessoal} options={{ headerShown: false }} />
-        <Stack.Screen name="Atividades" component={Atividades} options={{ headerShown: false }} />
-        <Stack.Screen name="Atividade" component={Atividade} options={{ headerShown: false }} />
-        <Stack.Screen name="CampeonatoQuadra" component={CampeonatoQuadra} options={{ headerShown: false }} />
-        <Stack.Screen name="CampeonatoPatio" component={CampeonatoPatio} options={{ headerShown: false }} />
-        <Stack.Screen name="Oficinas" component={Oficinas} options={{ headerShown: false }} />
-        <Stack.Screen name="Ranking" component={Ranking} options={{ headerShown: false }} />
-        <Stack.Screen name="MarcarPontos" component={MarcarPontos} options={{ headerShown: false }} />
-        <Stack.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>    
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Logado" component={MainTabNavigator} options={{ headerShown: false }} />
+          <Stack.Screen name="FichaPessoal" component={FichaPessoal} options={{ headerShown: false }} />
+          <Stack.Screen name="Atividades" component={Atividades} options={{ headerShown: false }} />
+          <Stack.Screen name="Atividade" component={Atividade} options={{ headerShown: false }} />
+          <Stack.Screen name="CampeonatoQuadra" component={CampeonatoQuadra} options={{ headerShown: false }} />
+          <Stack.Screen name="CampeonatoPatio" component={CampeonatoPatio} options={{ headerShown: false }} />
+          <Stack.Screen name="Oficinas" component={Oficinas} options={{ headerShown: false }} />
+          <Stack.Screen name="Ranking" component={Ranking} options={{ headerShown: false }} />
+          <Stack.Screen name="MarcarPontos" component={MarcarPontos} options={{ headerShown: false }} />
+          <Stack.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
+          <Stack.Screen name="CampeonatoP" component={CampeonatoP} options={{ headerShown: false }} />
+          <Stack.Screen name="CampeonatoQ" component={CampeonatoQ} options={{ headerShown: false }} />
+          <Stack.Screen name="Oficina" component={Oficina} options={{ headerShown: false }} />
+          <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

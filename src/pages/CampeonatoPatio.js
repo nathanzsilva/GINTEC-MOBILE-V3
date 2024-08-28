@@ -5,61 +5,85 @@ import httpClient from "../services/api";
 const CampeonatoPatio = ({ navigation }) => {
     const [isPendente, setIsPendente] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [activities, setActivities] = useState([]);
+    const [championshipsDates, setChampionshipDates] = useState([]);
+    const [championships, setChampionships] = useState([]);
+    const [selectedDate, setSelectedDate] = useState("");
 
     useEffect(() => {
-        handleGetActivities()
+        handleGetChampionship()
     }, [])
+    useEffect(() => {
+        const currentDate = new Date(selectedDate) ?? new Date();
+        const currentDateInApiResponse = championshipsDates.find(x => {
+            const gincanaDate = new Date(x.dataGincana);
+            return gincanaDate.getFullYear() === currentDate.getFullYear() &&
+                gincanaDate.getMonth() === currentDate.getMonth() &&
+                gincanaDate.getDate() === currentDate.getDate();
+        });
+        if (currentDateInApiResponse)
+            setChampionships(currentDateInApiResponse.campeonatos)
 
-    const handleGetActivities = async () => {
-        httpClient.get("/Atividade/AtividadesFeitas").then((response) => {
-            setActivities(response.data);
+    }, [selectedDate])
+
+    const handleGetChampionship = async () => {
+        httpClient.get("/Calendario").then((response) => {
+            setChampionshipDates(response.data);
+            const currentDate = new Date(selectedDate) ?? new Date();
+            const currentDateInApiResponse = response.data.find(x => {
+                const gincanaDate = new Date(x.dataGincana);
+                return gincanaDate.getFullYear() === currentDate.getFullYear() &&
+                    gincanaDate.getMonth() === currentDate.getMonth() &&
+                    gincanaDate.getDate() === currentDate.getDate();
+            });
+            if (currentDateInApiResponse)
+                setChampionships(currentDateInApiResponse.campeonatos)
+            else
+                setChampionships(response.data[0].campeonatos)
+
             setLoading(false)
         })
     }
 
-    const renderActivities = ({ item }) => {        
+    const renderChampionship = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => { navigation.navigate("Atividade", { atividade: item.descricao }) }}>
-                <View style={{ margin: 10, alignItems: "center", paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, flexDirection: "row", borderWidth: 1.75, borderColor: "#4C7EFF", justifyContent: "space-between" }}>
-                    <Text style={{ color: "#4C7EFF" }}>{item.descricao}</Text>
-                    <Image source={require("../../assets/botaoseta.png")} />
+            <TouchableOpacity onPress={() => { navigation.navigate("CampeonatoP", { campeonato: item.descricao, codigo: item.codigo }) }}>
+                <View style={{ margin: 10, alignItems: "center", paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, flexDirection: "row", borderWidth: 1.75, borderColor: "#FF4C4D", justifyContent: "space-between" }}>
+                    <Text style={{ color: "#FF4C4D" }}>{item.descricao}</Text>
+                    <Image source={require("../../assets/botaosetacoral.png")} />
                 </View>
             </TouchableOpacity >
         )
     };
+    const renderDataChampionship = ({ item }) => {
+        var date = new Date(item.dataGincana);
+        return (
+            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+                <Text style={{ ...styles.buttonText2, color: "#005C6D" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
+            </TouchableOpacity>
+        )
+    };
     return (
-        <View style={{ paddingTop: 80 , backgroundColor: "#fff", flex: 1}}>
+        <View style={{ paddingTop: 80, backgroundColor: "#fff", flex: 1 }}>
             <TouchableOpacity onPress={() => { navigation.navigate("FichaPessoal") }}>
                 <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
             </TouchableOpacity>
-            <Text style={{ ...styles.title2, marginTop: 30 }}>Ficha de Campeonatos de Pátio</Text>
-            {isPendente ?
-                <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
-                    <TouchableOpacity style={{ ...styles.button2, backgroundColor: "#FDD5D1" }}>
-                        <Text style={{ ...styles.buttonText2, color: "#7E0000" }}>Pendentes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button2 }} onPress={() => { setIsPendente(!isPendente) }}>
-                        <Text style={{ ...styles.buttonText2, color: "#DADADA" }}>Concluído</Text>
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
-                    <TouchableOpacity style={{ ...styles.button2 }} onPress={() => { setIsPendente(!isPendente) }}>
-                        <Text style={{ ...styles.buttonText2, color: "#DADADA" }}>Pendentes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button2, backgroundColor: "#E8FBE4" }}>
-                        <Text style={{ ...styles.buttonText2, color: "#3ACF1F" }}>Concluído</Text>
-                    </TouchableOpacity>
-                </View>
-            }
+            <Text style={{ ...styles.title2, marginTop: 30 }}>Campeonatos de Pátio</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 35 }}>
+                <FlatList
+                    contentContainerStyle={{ justifyContent: "space-evenly", width: "100%" }}
+                    horizontal={true}
+                    data={championshipsDates}
+                    renderItem={renderDataChampionship}
+                />
+            </View>
+
             {
                 loading ? (
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 200 }} />
-                ) : activities.filter(x => x.isRealizada == !isPendente).length > 0 ? (
+                ) : championships.length > 0 ? (
                     <FlatList
-                        data={activities.filter(x => x.isRealizada == !isPendente)}
-                        renderItem={renderActivities}
+                        data={championships}
+                        renderItem={renderChampionship}
                         style={{ marginLeft: 25, marginTop: 20 }}
                     />
                 ) : (

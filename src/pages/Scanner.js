@@ -20,8 +20,7 @@ const Scanner = ({ navigation }) => {
         setScanned(true);
         httpClient.post("/Usuario/InformacoesQRCode", {
             token: data
-        }).then((response) => {
-            console.log(response);
+        }).then((response) => {            
             Alert.alert(
                 `Deseja validar os pontos de ${response.data.nome}!`,
                 '',
@@ -39,10 +38,20 @@ const Scanner = ({ navigation }) => {
                                 token: data,
                                 atividadeCodigo: credencial.attCode,
                                 campeonatoCodigo: credencial.campCode
-                            }).then((response) => {
-                                console.log(response);
+                            }).then((response) => {                                                                
+                                Alert.alert(
+                                    'Pontos Marcados!',
+                                    'A atividade foi realizada com sucesso.',
+                                    [{ text: 'OK' }],
+                                    { cancelable: false }
+                                );
                             }).catch((error) => {
-                                console.error(error);
+                                Alert.alert(
+                                    'Algo deu errado!',
+                                    'A atividade já foi realizada pelo jogador.',
+                                    [{ text: 'OK' }],
+                                    { cancelable: false }
+                                );
                             });
                         },
                     },

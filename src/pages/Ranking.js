@@ -13,9 +13,7 @@ const Ranking = ({ navigation }) => {
 
     const handleGetRanking = async () => {
         httpClient.get("/Usuario/ObterPontuacaoGeral").then((response) => {
-            setRankingStudents(response.data)
-
-                ;
+            setRankingStudents(response.data);
 
             const turmaPontuacaoGeral = response.data.reduce((acc, student) => {
                 const turma = student.turma;
@@ -32,16 +30,10 @@ const Ranking = ({ navigation }) => {
             }, {});
 
             setRanking(Object.entries(turmaPontuacaoGeral).map(([turma, pontuacaoGeral], index) => ({
-                position: index,
-                turma,
-                pontuacaoGeral
-            })));
-
-            console.log(Object.entries(turmaPontuacaoGeral).map(([turma, pontuacaoGeral], index) => ({
                 position: index + 1,
                 turma,
                 pontuacaoGeral
-            })))
+            })));            
         })
     }
     return (
@@ -51,7 +43,7 @@ const Ranking = ({ navigation }) => {
                     <TouchableOpacity onPress={() => { navigation.navigate("Home") }}>
                         <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
                     </TouchableOpacity>
-                    <Image source={require("../../assets/comboBoxIcon.png")} style={{ width: 30, height: 30, backgroundColor: "white", borderRadius: 7 }} />
+                    {/* <Image source={require("../../assets/comboBoxIcon.png")} style={{ width: 30, height: 30, backgroundColor: "white", borderRadius: 7 }} /> */}
                 </View>
 
                 <Text style={{ ...styles.title2, color: "white", textAlign: 'left', marginLeft: 40 }}>Ranking das salas</Text>
@@ -59,20 +51,20 @@ const Ranking = ({ navigation }) => {
                     <View style={style.rankingItem2}>
                         <Text style={style.rankTitle}>2º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 70, height: 70, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>Recursos Humanos</Text>
-                        <Text style={style.rankPoints}>121.140</Text>
+                        <Text style={style.rankName}>{ranking[1]?.turma}</Text>
+                        <Text style={style.rankPoints}>{ranking[1]?.pontuacaoGeral}</Text>
                     </View>
                     <View style={style.rankingItem1}>
                         <Text style={style.rankTitle}>1º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 90, height: 90, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>Informática</Text>
-                        <Text style={style.rankPoints}>135.390</Text>
+                        <Text style={style.rankName}>{ranking[0]?.turma}</Text>
+                        <Text style={style.rankPoints}>{ranking[0]?.pontuacaoGeral}</Text>
                     </View>
                     <View style={style.rankingItem3}>
                         <Text style={style.rankTitle}>3º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 70, height: 70, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>Administração</Text>
-                        <Text style={style.rankPoints}>110.450</Text>
+                        <Text style={style.rankName}>{ranking[2]?.turma}</Text>
+                        <Text style={style.rankPoints}>{ranking[2]?.pontuacaoGeral}</Text>
                     </View>
                 </View>
                 <View style={{ flex: 1,marginTop: -10,  backgroundColor: "#fff", borderTopLeftRadius: 20, borderTopRightRadius: 20, justifyContent: "space-around", alignItems: "center", }}>
