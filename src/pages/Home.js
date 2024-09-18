@@ -46,7 +46,7 @@ const Home = ({ navigation }) => {
                 {!role ?
                     <View style={{ alignItems: "center", justifyContent: "center", width: "50%", height: "100%", justifyContent: "space-evenly" }}>
                         <TouchableOpacity onPress={() => { navigation.navigate('FichaPessoal') }}>
-                            <Image source={require("../../assets/fichaPessoal.png")} />
+                            <Image source={require("../../assets/fichaPessoal.png")}  style={{width: 150, objectFit: "contain"}}/>
                         </TouchableOpacity>
                     </View>
                     :
@@ -62,10 +62,10 @@ const Home = ({ navigation }) => {
 
                 <View style={{ alignItems: "center", justifyContent: "space-evenly", width: "50%", height: "100%" }}>
                     <TouchableOpacity onPress={() => { navigation.navigate("Ranking") }}>
-                        <Image source={require("../../assets/ranking.png")} />
+                        <Image source={require("../../assets/ranking.png")}  style={{width: 150, objectFit: "contain", height: 105}}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate("Perfil") }}>
-                    <Image source={require("../../assets/perfil.png")} />
+                    <Image source={require("../../assets/perfil.png")} style={{width: 150, objectFit: "contain", height: 105}}/>
                     </TouchableOpacity>
                 </View>
             </View>

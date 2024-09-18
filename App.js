@@ -18,7 +18,6 @@ import Ranking from './src/pages/Ranking';
 import Scanner from './src/pages/Scanner';
 import MarcarPontos from './src/pages/MarcarPontos';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Campeonato from './src/pages/CampeonatoP';
 import CampeonatoP from './src/pages/CampeonatoP';
 import CampeonatoQ from './src/pages/CampeonatoQ';
 import Oficina from './src/pages/Oficina';
@@ -50,16 +49,16 @@ function MainTabNavigator() {
           let iconName;
 
           if (route.name === 'Home') {
-            return <Image source={require('./assets/home.png')} />;
+            return <Image source={require('./assets/home.png')} style={{ width: 30, height: 30, objectFit: "contain" }} />;
           } else if (route.name === 'QrCode') {
-            return <Image source={require('./assets/qrCode.png')} />;
+            return <Image source={require('./assets/qrCode.png')} style={{ width: 66, height: 66, objectFit: "contain" }} />;
           } else if (route.name === 'FichaPessoal2') {
-            return <Image source={require('./assets/ficha.png')} />;
+            return <Image source={require('./assets/ficha.png')} style={{ width: 66, height: 66, objectFit: "contain" }} />;
           }
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: { backgroundColor: '#fff' }, // Estilo do tab bar
+        tabBarStyle: { backgroundColor: '#fff' },
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />

@@ -38,7 +38,8 @@ const Scanner = ({ navigation }) => {
                                 token: data,
                                 atividadeCodigo: credencial.attCode,
                                 campeonatoCodigo: credencial.campCode
-                            }).then((response) => {                                                                
+                            }).then((response) => { 
+                                console.log(response)                                                               
                                 Alert.alert(
                                     'Pontos Marcados!',
                                     'A atividade foi realizada com sucesso.',
@@ -46,12 +47,7 @@ const Scanner = ({ navigation }) => {
                                     { cancelable: false }
                                 );
                             }).catch((error) => {
-                                Alert.alert(
-                                    'Algo deu errado!',
-                                    'A atividade já foi realizada pelo jogador.',
-                                    [{ text: 'OK' }],
-                                    { cancelable: false }
-                                );
+                                
                             });
                         },
                     },
