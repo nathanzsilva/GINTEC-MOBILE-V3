@@ -20,9 +20,11 @@ const CampeonatoQuadra = ({ navigation }) => {
                 gincanaDate.getMonth() === currentDate.getMonth() &&
                 gincanaDate.getDate() === currentDate.getDate();
         });
-        if (currentDateInApiResponse)
-            setChampionships(currentDateInApiResponse.campeonatos)
-        
+        if (currentDateInApiResponse) {
+            console.log(currentDateInApiResponse.campeonatos.filter(x => x.isQuadra))
+            setChampionships(currentDateInApiResponse.campeonatos.filter(x => x.isQuadra))
+        }
+
     }, [selectedDate])
 
     const handleGetChampionship = async () => {
@@ -38,9 +40,9 @@ const CampeonatoQuadra = ({ navigation }) => {
                     gincanaDate.getDate() === currentDate.getDate();
             });
             if (currentDateInApiResponse)
-                setChampionships(currentDateInApiResponse.campeonatos)
+                setChampionships(currentDateInApiResponse.campeonatos.filter(x => x.isQuadra))
             else
-                setChampionships(response.data[0].campeonatos)
+                setChampionships(response.data[0].campeonatos.filter(x => x.isQuadra))
 
             setLoading(false)
         })

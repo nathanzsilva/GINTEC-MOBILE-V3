@@ -57,7 +57,7 @@ const CampeonatoQ = ({ navigation, route }) => {
                 <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%" }}>
                     <Text style={{ fontSize: 20 }} t>Quantidade de pontos</Text>
                     <View style={{ backgroundColor: "#E8FBE4", paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 15, color: "#3ACF1F" }}> 300</Text>
+                        <Text style={{ fontSize: 15, color: "#3ACF1F" }}>600</Text>
                     </View>
                 </View>
                 {(championship?.fases ?? []).length > 0 ?

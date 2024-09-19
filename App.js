@@ -53,7 +53,7 @@ function MainTabNavigator() {
           } else if (route.name === 'QrCode') {
             return <Image source={require('./assets/qrCode.png')} style={{ width: 66, height: 66, objectFit: "contain" }} />;
           } else if (route.name === 'FichaPessoal2') {
-            return <Image source={require('./assets/ficha.png')} style={{ width: 66, height: 66, objectFit: "contain" }} />;
+            return <Image source={require('./assets/ficha.png')} style={{ width: 30, objectFit: "contain" }} />;
           }
         },
         tabBarActiveTintColor: 'tomato',
