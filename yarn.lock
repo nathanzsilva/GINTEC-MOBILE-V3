@@ -3874,7 +3874,7 @@ expo-updates@~0.25.24:
     ignore "^5.3.1"
     resolve-from "^5.0.0"
 
-expo@*, expo@~51.0.28:
+expo@*, expo@^51.0.32:
   version "51.0.32"
   resolved "https://registry.npmjs.org/expo/-/expo-51.0.32.tgz"
   integrity sha512-6GEhYvHRnyS/6BytQagGkClsaqbuwAtlN3A6oDfnNMRKLmz6NE/r+Rjg9zbQgUO6zigqb60Yj5lAX32DmixRDw==

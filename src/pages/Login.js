@@ -93,7 +93,7 @@ const Login = ({ navigation }) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} scrollEnabled={false}>
         <View style={screenstyles.containerloginhead}>
           <Image
-            source={require('../../assets/icon.png')}
+            source={require('../../assets/splash.png')}
             style={{ height: 133, width: 153, objectFit: "contain" }}
           />
         </View>
