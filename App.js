@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './src/pages/Login';
 import Home from './src/pages/Home';
 import QrCode from './src/pages/QRCode';
-import { Image, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import FichaPessoal from './src/pages/FichaPessoal';
 import Atividades from './src/pages/Atividades';
 import Atividade from './src/pages/Atividade';
@@ -40,6 +40,7 @@ function MainTabNavigator() {
     handleGetAjudantes();
   }, []);
 
+
   return (
     <Tab.Navigator
       initialRouteName='Home'
@@ -58,14 +59,12 @@ function MainTabNavigator() {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle: { backgroundColor: '#fff' },
+        tabBarStyle: { backgroundColor: '#fff', paddingBottom: 22, paddingTop: 8, height: 60 },
       })}
     >
       <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
-
       <Tab.Screen name="FichaPessoal2" component={FichaPessoal} options={{ headerShown: false }} />
-
     </Tab.Navigator>
   );
 }

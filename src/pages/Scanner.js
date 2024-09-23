@@ -20,7 +20,7 @@ const Scanner = ({ navigation }) => {
         setScanned(true);
         httpClient.post("/Usuario/InformacoesQRCode", {
             token: data
-        }).then((response) => {            
+        }).then((response) => {
             Alert.alert(
                 `Deseja validar os pontos de ${response.data.nome}!`,
                 '',
@@ -34,21 +34,137 @@ const Scanner = ({ navigation }) => {
                         text: 'Sim',
                         onPress: async () => {
                             var credencial = await handleGetAjudante();
-                            httpClient.post("/Atividade/MarcarPontos", {
-                                token: data,
-                                atividadeCodigo: credencial.attCode,
-                                campeonatoCodigo: credencial.campCode
-                            }).then((response) => { 
-                                console.log(response)                                                               
-                                Alert.alert(
-                                    'Pontos Marcados!',
-                                    'A atividade foi realizada com sucesso.',
-                                    [{ text: 'OK' }],
-                                    { cancelable: false }
-                                );
-                            }).catch((error) => {
-                                
-                            });
+                            let atividadesExtras = [];                            
+
+                            if (credencial.attCode != "null") {
+                                await httpClient.get("/Atividade/" + credencial.attCode)
+                                    .then((response) => {
+                                        if (response.status == 200)
+                                            if (response.data.atividadePontuacaoExtra.length > 0) {
+                                                atividadesExtras = response.data.atividadePontuacaoExtra;
+                                            }
+                                            else if (response.status == 400) {
+                                                if (response.data.error == "Você já jogou este jogo/campeonato")
+                                                    Alert.alert(
+                                                        'Atividade Feita!',
+                                                        'Você já jogou este jogo/campeonato.',
+                                                        [{ text: 'OK' }],
+                                                        { cancelable: false }
+                                                    );
+                                                else if (response.data.error == "Atividade não é deste dia")
+                                                    Alert.alert(
+                                                        'Atividade não pode ser marcada!',
+                                                        'Esta atividade não pode ser marcada, pois não pertence a este dia da Gincana.',
+                                                        [{ text: 'OK' }],
+                                                        { cancelable: false }
+                                                    );
+                                            }
+                                    });
+
+                                if (atividadesExtras.length > 0) {
+                                    let buttons = [{ pontuacao: "Participação", AtividadePontuacaoExtraCodigo: null }, ...atividadesExtras].map((extra) => ({
+                                        text: `Pontuação: ${extra.pontuacao}`,
+                                        onPress: async () => {
+                                            await httpClient.post("/Atividade/MarcarPontos", {
+                                                token: data,
+                                                atividadeCodigo: credencial.attCode,
+                                                campeonatoCodigo: credencial.campCode,
+                                                AtividadePontuacaoExtraCodigo: extra.codigo
+                                            }).then((response) => {                                                
+                                                if (response.status == 200)
+                                                    Alert.alert(
+                                                        'Pontos Marcados!',
+                                                        'A atividade foi realizada com sucesso.',
+                                                        [{ text: 'OK' }],
+                                                        { cancelable: false }
+                                                    );
+                                                else if (response.status == 400) {
+                                                    if (response.data.error == "Você já jogou este jogo/campeonato")
+                                                        Alert.alert(
+                                                            'Atividade Feita!',
+                                                            'Você já jogou este jogo/campeonato.',
+                                                            [{ text: 'OK' }],
+                                                            { cancelable: false }
+                                                        );
+                                                    else if (response.data.error == "Atividade não é deste dia")
+                                                        Alert.alert(
+                                                            'Atividade não pode ser marcada!',
+                                                            'Esta atividade não pode ser marcada, pois não pertence a este dia da Gincana.',
+                                                            [{ text: 'OK' }],
+                                                            { cancelable: false }
+                                                        );
+                                                }
+                                            }).catch((error) => {                                                
+                                            });
+                                        },
+                                    }));
+
+                                    Alert.alert(
+                                        'Selecione a Pontuação Extra',
+                                        'Escolha a pontuação extra para essa atividade:',
+                                        buttons,
+                                        { cancelable: true }
+                                    );
+                                } else {
+                                    await httpClient.post("/Atividade/MarcarPontos", {
+                                        token: data,
+                                        atividadeCodigo: credencial.attCode,
+                                        campeonatoCodigo: credencial.campCode
+
+                                    }).then((response) => {                                        
+                                        if (response.status == 200)
+                                            Alert.alert(
+                                                'Pontos Marcados!',
+                                                'A atividade foi realizada com sucesso.',
+                                                [{ text: 'OK' }],
+                                                { cancelable: false }
+                                            );
+                                        else if (response.status == 400) {
+                                            if (response.data.error == "Você já jogou este jogo/campeonato")
+                                                Alert.alert(
+                                                    'Atividade Feita!',
+                                                    'Você já jogou este jogo/campeonato.',
+                                                    [{ text: 'OK' }],
+                                                    { cancelable: false }
+                                                );
+                                            else if (response.data.error == "Atividade não é deste dia")
+                                                Alert.alert(
+                                                    'Atividade não pode ser marcada!',
+                                                    'Esta atividade não pode ser marcada, pois não pertence a este dia da Gincana.',
+                                                    [{ text: 'OK' }],
+                                                    { cancelable: false }
+                                                );
+                                        }
+                                    }).catch((error) => {                                        
+                                    });
+                                }
+                            }
+                            if (credencial.attCode == "null") {
+                                await httpClient.post("/Atividade/MarcarPontos", {
+                                    token: data,
+                                    atividadeCodigo: credencial.attCode,
+                                    campeonatoCodigo: credencial.campCode
+
+                                }).then((response) => {                                    
+                                    if (response.status == 200)
+                                        Alert.alert(
+                                            'Pontos Marcados!',
+                                            'A atividade foi realizada com sucesso.',
+                                            [{ text: 'OK' }],
+                                            { cancelable: false }
+                                        );
+                                    else if (response.status == 400) {
+                                        if (response.data.error == "Você já jogou este jogo/campeonato")
+                                            Alert.alert(
+                                                'Atividade Feita!',
+                                                'Você já jogou este jogo/campeonato.',
+                                                [{ text: 'OK' }],
+                                                { cancelable: false }
+                                            );
+                                    }
+                                }).catch((error) => {                                    
+                                });
+                            }
                         },
                     },
                 ],
@@ -63,6 +179,7 @@ const Scanner = ({ navigation }) => {
     const handleGetAjudante = async () => {
         const attCode = await AsyncStorage.getItem("atividadeCodigo");
         const campCode = await AsyncStorage.getItem("campeonatoCodigo");
+
 
         return {
             attCode: attCode,

@@ -25,25 +25,32 @@ const Home = ({ navigation }) => {
 
     const handleGetNotification = async () => {
         setLoading(true)
-        httpClient.get("/Notificacao").then((response) => {
-            console.log(response.data)
+        httpClient.get("/Notificacao").then((response) => {            
             setNotifications(response.data);
         })
         setLoading(false)
     }
 
     const renderNotification = ({ item }) => (
-        <View style={{ margin: 10, padding: 10, borderRadius: 5, flexDirection: "row" }}>
+        <View style={{
+            marginVertical: 10, marginHorizontal: 5, padding: 10, borderRadius: 5, flexDirection: "row", backgroundColor: "#ffff", borderRadius: 8,
+            shadowColor: "#000", // Cor da sombra
+            shadowOffset: { width: 0, height: 0 }, // Deslocamento da sombra
+            shadowOpacity: 0.25, // Opacidade da sombra
+            shadowRadius: 3.84, // Raio da sombra
+            elevation: 5, // Somente para Android
+            height: 77,                        
+        }}>
             <View style={{ backgroundColor: item.color, height: "100%", width: 8, marginRight: 6, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}>
             </View>
-            <View>
+            <View style={{flexDirection: 'column', justifyContent: 'space-evenly', marginLeft: 10}}>
                 <Text style={styles.notificationTitle}>{item.titulo}</Text>
-                <Text style={{...styles.notificationBody, fontWeight: '300'}}>{item.descricao}</Text>
+                <Text style={{ ...styles.notificationBody, fontWeight: '300' }}>{item.descricao}</Text>
             </View>
         </View>
     );
     return (
-        <View style={{ marginTop: 50, flex: 1 }}>
+        <View style={{ paddingTop: 50, flex: 1, backgroundColor: "#fff" }}>
             <View style={{ height: 30 }}>
                 {/* <Image source={require("../../assets/sinoAtivado.png")} style={{ alignSelf: 'flex-end', marginRight: 40 }} height={140} /> */}
             </View>
@@ -71,8 +78,8 @@ const Home = ({ navigation }) => {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { navigation.navigate('MarcarPontos') }}>
                             <ImageBackground source={require("../../assets/Scanner.png")} style={{ width: 150, height: 105, justifyContent: "flex-end", alignItems: "flex-start" }} imageStyle={{ objectFit: "contain" }}>
-                                <Text style={{ color: "white", fontSize: 16, fontWeight: "bold", marginBottom: 10, marginLeft: 10 }}>
-                                    {"Marcar\n Pontos"}
+                                <Text style={{ color: "white", fontSize: 16, fontWeight: "bold", marginBottom: 15, marginLeft: 10 }}>
+                                    {"Scanner"}
                                 </Text>
                             </ImageBackground>
                         </TouchableOpacity>
@@ -107,12 +114,10 @@ const Home = ({ navigation }) => {
                     <FlatList scrollEnabled={true}
                         data={notifications}
                         renderItem={renderNotification}
-                        style={{
-                            marginLeft: 25,
-                            paddingHorizontal: 25, height: "80px"
-                        }}
+                        style={{ paddingHorizontal: 25 }}
                         contentContainerStyle={{
-                            paddingBottom: 50
+                            paddingBottom: 50,
+                            justifyContent: 'center'
                         }}
                     />
 

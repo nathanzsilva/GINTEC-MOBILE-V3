@@ -26,12 +26,12 @@ const CampeonatoQ = ({ navigation, route }) => {
         var date = new Date(item.dataGincana);
         var jogos = item.jogos;
         var feita = []
-        if(jogos){
+        if (jogos) {
             var attrealizada = jogos.filter(x => x.atividadeCampeonatoRealizada.length > 0)
             feita = attrealizada.filter(x => x.usuarioCodigo == userCode)
         }
         return (
-            <TouchableOpacity style={{ ...styles.button2, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+            <TouchableOpacity style={{ ...styles.button2, flexDirection: "row", alignItems: "center" }}>
                 {feita.length > 0 ?
                     <Image source={require("../../assets/campeonatofeito.png")} />
                     :
@@ -49,12 +49,12 @@ const CampeonatoQ = ({ navigation, route }) => {
                     <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
                 </TouchableOpacity>
                 <View style={{ height: showPhase ? 150 : 400, justifyContent: "center", alignSelf: "flex-start", marginLeft: 29 }}>
-                    <Text style={{ ...styles.titleGG, color: "white" }}>{campeonato}</Text>
-                    <Text style={{ color: "white", fontSize: 18, marginTop: 10 }}>Jogo de pátio</Text>
+                    <Text style={{ ...styles.titleGG, color: "white", textAlign: "left" }}>{campeonato}</Text>
+                    <Text style={{ color: "white", fontSize: 18, marginTop: 10 }}>Campeonato de Quadra</Text>
                 </View>
             </View>
             <View style={{ flex: 1, backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-around", alignItems: "center" }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%" }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "80%" }}>
                     <Text style={{ fontSize: 20 }} t>Quantidade de pontos</Text>
                     <View style={{ backgroundColor: "#E8FBE4", paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10 }}>
                         <Text style={{ fontSize: 15, color: "#3ACF1F" }}>600</Text>
@@ -62,15 +62,32 @@ const CampeonatoQ = ({ navigation, route }) => {
                 </View>
                 {(championship?.fases ?? []).length > 0 ?
                     <TouchableOpacity style={{ width: "80%" }} onPress={() => { setShowPhase(!showPhase) }}>
-                        <View style={{ flexDirection: "row", alignItems: "center", gap: 7, marginVertical: 10 }}>
+                        <View style={{                            
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 7,
+                            marginVertical: 10,
+                            backgroundColor: "#ffff",
+                            borderRadius: 10,
+                            justifyContent: "center",
+                            shadowColor: "#000", // Cor da sombra
+                            shadowOffset: { width: 0, height: 2 }, // Deslocamento da sombra
+                            shadowOpacity: 0.25, // Opacidade da sombra
+                            shadowRadius: 3.84, // Raio da sombra
+                            elevation: 5, // Somente para Android,                            
+                            paddingVertical: 8,
+                            width: "35%"
+                        }}>
                             <Text style={{ fontSize: 20, fontWeight: 500, textAlign: "left" }}>Fases</Text>
                             <Image source={require("../../assets/setabaixo.png")} style={{ transform: [{ rotate: showPhase ? "0deg" : "180deg" }] }} />
                         </View>
+
                         {showPhase ?
                             <FlatList
-                                contentContainerStyle={{ justifyContent: "space-evenly", width: "100%" }}
                                 data={championship.fases}
                                 renderItem={renderPhases}
+                                style={{ width: "100%" }}
+                                contentContainerStyle={{ justifyContent: "flex-start" }}
                             />
                             : ""
                         }

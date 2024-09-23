@@ -13,7 +13,7 @@ const Atividades = ({ navigation }) => {
     }, [])
 
     const handleGetActivities = async () => {
-        httpClient.get("/Atividade/AtividadesFeitas").then((response) => {
+        httpClient.get("/Atividade/AtividadesFeitas").then((response) => {            
             setActivities(response.data);
             setLoading(false)
         })
@@ -21,7 +21,7 @@ const Atividades = ({ navigation }) => {
 
     const renderActivities = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => { navigation.navigate("Atividade", { atividade: item.descricao }) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate("Atividade", { atividade: item.descricao, isPendente: isPendente }) }}>
                 <View style={{ margin: 10, alignItems: "center", paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, flexDirection: "row", borderWidth: 1.75, borderColor: "#4C7EFF", justifyContent: "space-between" }}>
                     <Text style={{ color: "#4C7EFF" }}>{item.descricao}</Text>
                     <Image source={require("../../assets/botaoseta.png")} />
@@ -59,11 +59,12 @@ const Atividades = ({ navigation }) => {
                 {
                     loading ? (
                         <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 200 }} />
-                    ) : activities.filter(x => x.isRealizada == !isPendente).length > 0 ? (
+                    ) : (activities ?? []).filter(x => x.isRealizada == !isPendente).length > 0 ? (
                         <FlatList
                             data={activities.filter(x => x.isRealizada == !isPendente)}
                             renderItem={renderActivities}
-                            style={{ marginLeft: 25, marginTop: 20 }}
+                            style={{ width: "100%", paddingHorizontal: 13, marginTop: 30 }}
+                            contentContainerStyle={{ justifyContent: "flex-start" }}
                         />
                     ) : (
                         <View style={{ height: 400, width: "100%", alignItems: "center", justifyContent: "center" }}>

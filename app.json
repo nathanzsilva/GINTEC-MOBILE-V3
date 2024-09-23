@@ -1,53 +1,65 @@
 {
   "expo": {
-    "name": "Gintec",
-    "slug": "newgintec",
-    "version": "1.0.1",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "bundleIdentifier": "com.etec.gintec",
-      "buildNumber": "1.0.0",
-      "supportsTablet": true
-    },
-    "android": {
-      "package": "com.etec.gintec",
-      "versionCode": 2
-    },
-    "permissions": [
-      "android.permission.CAMERA",
-      "android.permission.RECORD_AUDIO"
-    ],
-    "adaptiveIcon": {
-      "foregroundImage": "./assets/adaptive-icon.png",
-      "backgroundColor": "#ffffff"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "485c237b-b0db-476e-9246-3f2ad2cb5505"
-      }
-    },
-    "owner": "osgays",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/485c237b-b0db-476e-9246-3f2ad2cb5505"
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],  
+  "name": "Gintec",
+  "slug": "newgintec",
+  "version": "2.1.1",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "userInterfaceStyle": "light",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "ios": {
+    "bundleIdentifier": "com.etec.gintec",
+    "buildNumber": "1.0.0",
+    "supportsTablet": true,
+    "entitlements": {
+      "aps-environment": "production"
     }
   },
-  "web": {
-    "favicon": "./assets/favicon.png"
+  "android": {
+    "googleServicesFile": "./google-services.json",
+    "package": "com.etec.gintec",
+    "versionCode": 4
+  },
+  "permissions": [
+    "android.permission.CAMERA",
+    "android.permission.RECORD_AUDIO"
+  ],
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/adaptive-icon.png",
+    "backgroundColor": "#ffffff"
   },
   "extra": {
     "eas": {
-      "projectId": "1fc8f0f6-49f2-42af-bddb-cc0e1ac94f16"
+      "projectId": "485c237b-b0db-476e-9246-3f2ad2cb5505"
     }
   },
-  "owner": "osgays"
+  "owner": "osgays",
+  "runtimeVersion": {
+    "policy": "appVersion"
+  },
+  "updates": {
+    "url": "https://u.expo.dev/485c237b-b0db-476e-9246-3f2ad2cb5505"
+  }
+},
+"web": {
+  "favicon": "./assets/favicon.png"
+},
+"extra": {
+  "eas": {
+    "projectId": "1fc8f0f6-49f2-42af-bddb-cc0e1ac94f16"
+  }
+},
+"owner": "osgays"
 }

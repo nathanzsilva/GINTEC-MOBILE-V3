@@ -33,11 +33,11 @@ const Ranking = ({ navigation }) => {
                 position: index + 1,
                 turma,
                 pontuacaoGeral
-            })));            
+            })).slice(0, 10));            
         })
     }
     return (
-        <ImageBackground style={styles.backgroundImage} source={require('../../assets/RankingBG.png')}>
+        <ImageBackground style={{ ...styles.backgroundImage, flex: 1 }} source={require('../../assets/RankingBG.png')}>
             <View style={{ marginTop: 80, height: "100%" }}>
                 <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <TouchableOpacity onPress={() => { navigation.navigate("Home") }}>
@@ -67,16 +67,25 @@ const Ranking = ({ navigation }) => {
                         <Text style={style.rankPoints}>{ranking[2]?.pontuacaoGeral}</Text>
                     </View>
                 </View>
-                <View style={{ flex: 1,marginTop: -10,  backgroundColor: "#fff", borderTopLeftRadius: 20, borderTopRightRadius: 20, justifyContent: "space-around", alignItems: "center", }}>
+                <View style={{ flex: 1, marginTop: -10, backgroundColor: "#fff", borderTopLeftRadius: 20, borderTopRightRadius: 20, justifyContent: "space-around", alignItems: "center", }}>
                     <FlatList
                         data={ranking}
                         keyExtractor={item => item.id}
+                        style={{
+                            height: "80px"
+                        }}
+                        contentContainerStyle={{
+                            paddingBottom: 90
+                        }}
                         renderItem={({ item }) => {
 
                             return (
-                                <View style={{ marginVertical: 10, width: "100%", paddingHorizontal: 60, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                    <Text style={styles.itemText}>{item.position}º </Text>
-                                    <View style={{ backgroundColor: "grey", width: 30, height: 30, borderRadius: 100 }}></View>
+                                <View style={{ marginVertical: 10, width: "100%", paddingHorizontal: 60, display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                    <View style={{width: 30}}>
+                                        <Text style={styles.itemText}>{item.position}º </Text>
+                                    </View>
+
+                                    <View style={{ backgroundColor: "grey", width: 30, height: 30, borderRadius: 100 , marginRight: 10}}></View>
                                     <View style={{ width: 150 }}>
                                         <Text style={styles.itemText}>{item.turma}</Text>
                                     </View>

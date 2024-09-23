@@ -12,17 +12,17 @@ const CampeonatoPatio = ({ navigation }) => {
     useEffect(() => {
         handleGetChampionship()
     }, [])
-    useEffect(() => {
-        const currentDate = new Date(selectedDate) ?? new Date();
+    useEffect(() => {    
+        const currentDate = !selectedDate ? new Date() : new Date(selectedDate);        
+        
         const currentDateInApiResponse = championshipsDates.find(x => {
             const gincanaDate = new Date(x.dataGincana);
             return gincanaDate.getFullYear() === currentDate.getFullYear() &&
                 gincanaDate.getMonth() === currentDate.getMonth() &&
                 gincanaDate.getDate() === currentDate.getDate();
         });
-        if (currentDateInApiResponse){
-            console.log(currentDateInApiResponse.campeonatos)
-            setChampionships(currentDateInApiResponse.campeonatos.filter(x => !x.isQuadra))
+        if (currentDateInApiResponse) {
+            setChampionships(currentDateInApiResponse.campeonatos.filter(x => !x.isQuadra))        
         }
 
     }, [selectedDate])
@@ -30,15 +30,18 @@ const CampeonatoPatio = ({ navigation }) => {
     const handleGetChampionship = async () => {
         httpClient.get("/Calendario").then((response) => {
             setChampionshipDates(response.data);
-            const currentDate = new Date(selectedDate) ?? new Date();
+            const currentDate = !selectedDate ? new Date() : new Date(selectedDate);            
+
             const currentDateInApiResponse = response.data.find(x => {
-                const gincanaDate = new Date(x.dataGincana);
+                const gincanaDate = new Date(x.dataGincana);                
                 return gincanaDate.getFullYear() === currentDate.getFullYear() &&
                     gincanaDate.getMonth() === currentDate.getMonth() &&
                     gincanaDate.getDate() === currentDate.getDate();
             });
-            if (currentDateInApiResponse)
+            if (currentDateInApiResponse) {
                 setChampionships(currentDateInApiResponse.campeonatos.filter(x => !x.isQuadra))
+                setSelectedDate(currentDateInApiResponse)
+            }
             else
                 setChampionships(response.data[0].campeonatos.filter(x => !x.isQuadra))
 
@@ -58,8 +61,15 @@ const CampeonatoPatio = ({ navigation }) => {
     };
     const renderDataChampionship = ({ item }) => {
         var date = new Date(item.dataGincana);
+        var date2 = new Date(selectedDate);
+        if (`${date2.getDate().toString().padStart(2, "0")}/${date2.getMonth().toString().padStart(2, "0")}` == `${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`)
+            return (
+                <TouchableOpacity style={{ ...styles.button2, justifyContent: "center", width: 80, backgroundColor: "#005C6D" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+                    <Text style={{ ...styles.buttonText2, color: "#ffffff" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
+                </TouchableOpacity>
+            )
         return (
-            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center", width: 80, backgroundColor: "#dadada" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
                 <Text style={{ ...styles.buttonText2, color: "#005C6D" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
             </TouchableOpacity>
         )
@@ -86,7 +96,8 @@ const CampeonatoPatio = ({ navigation }) => {
                     <FlatList
                         data={championships}
                         renderItem={renderChampionship}
-                        style={{ marginLeft: 25, marginTop: 20 }}
+                        style={{ width: "100%", paddingHorizontal: 13, marginTop: 30 }}
+                        contentContainerStyle={{ justifyContent: "flex-start" }}
                     />
                 ) : (
                     <View style={{ height: 400, width: "100%", alignItems: "center", justifyContent: "center" }}>

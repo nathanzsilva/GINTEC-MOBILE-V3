@@ -64,10 +64,14 @@ const Login = ({ navigation }) => {
           setLoading(false);
           navigation.navigate('Logado');
         }
+        if(response.status == 401){
+          setLoading(false);
+          Alert.alert('Erro', 'Usuário ou senha incorretos');
+        }
       })
       .catch(error => {
         setLoading(false);
-        Alert.alert('Erro', 'Usuário ou senha incorretos');
+        Alert.alert('Erro', 'Algo deu errado, contate um administrador!');
       });
   };
 

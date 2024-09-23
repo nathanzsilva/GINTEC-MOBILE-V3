@@ -20,9 +20,9 @@ const CampeonatoQuadra = ({ navigation }) => {
                 gincanaDate.getMonth() === currentDate.getMonth() &&
                 gincanaDate.getDate() === currentDate.getDate();
         });
-        if (currentDateInApiResponse) {
-            console.log(currentDateInApiResponse.campeonatos.filter(x => x.isQuadra))
+        if (currentDateInApiResponse) {            
             setChampionships(currentDateInApiResponse.campeonatos.filter(x => x.isQuadra))
+            setSelectedDate(currentDateInApiResponse)
         }
 
     }, [selectedDate])
@@ -60,8 +60,15 @@ const CampeonatoQuadra = ({ navigation }) => {
     };
     const renderDataChampionship = ({ item }) => {
         var date = new Date(item.dataGincana);
+        var date2 = new Date(selectedDate);        
+        if (`${date2.getDate().toString().padStart(2, "0")}/${date2.getMonth().toString().padStart(2, "0")}` == `${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`)
+            return (
+                <TouchableOpacity style={{ ...styles.button2, justifyContent: "center", width: 80, backgroundColor: "#005C6D" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+                    <Text style={{ ...styles.buttonText2, color: "#ffffff" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
+                </TouchableOpacity>
+            )
         return (
-            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
+            <TouchableOpacity style={{ ...styles.button2, justifyContent: "center", width: 80, backgroundColor: "#dadada" }} onPress={() => { setSelectedDate(item.dataGincana) }}>
                 <Text style={{ ...styles.buttonText2, color: "#005C6D" }}>{`${date.getDate().toString().padStart(2, "0")}/${date.getMonth().toString().padStart(2, "0")}`}</Text>
             </TouchableOpacity>
         )
@@ -88,7 +95,8 @@ const CampeonatoQuadra = ({ navigation }) => {
                     <FlatList
                         data={championships}
                         renderItem={renderChampionship}
-                        style={{ marginLeft: 25, marginTop: 20 }}
+                        style={{ width: "100%", paddingHorizontal: 13, marginTop: 30 }}
+                        contentContainerStyle={{ justifyContent: "flex-start" }}
                     />
                 ) : (
                     <View style={{ height: 400, width: "100%", alignItems: "center", justifyContent: "center" }}>
