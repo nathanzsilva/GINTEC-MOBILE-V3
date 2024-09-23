@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert, ActivityIndicator } from 'react-native';
 import styles from '../utils/styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import httpClient from '../services/api';
 import * as ImagePicker from 'expo-image-picker';
+import mime from 'mime';
+
 
 
 
@@ -14,6 +16,7 @@ const Perfil = ({ navigation }) => {
     const [averagePoints, setAveragePoints] = useState(0)
     const [todayPoints, setTodayPoints] = useState(0)
     const [isEditing, setIsEditing] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [editUser, setEditUser] = useState({})
     const [fotoPerfil, setFotoPerfil] = useState("");
 
@@ -94,34 +97,49 @@ const Perfil = ({ navigation }) => {
         });
     }
 
-    const handleEditUser = async () => {
+    const handleEditUser = () => {
         try {
-            console.log(editUser.senha)
-            console.log(editUser.confsenha)
+            setLoading(true);
             if (editUser.senha != editUser.confsenha) {
                 Alert.alert('Alerta', 'As senhas não conferem.');
-                return
+                return;
             }
             const formData = new FormData();
             formData.append('email', editUser.email);
             formData.append('senha', editUser.senha);
+
             if (fotoPerfil) {
                 const uri = fotoPerfil;
-                const fileType = uri.split('.').pop(); // Obtém o tipo do arquivo
+                const fileType = mime.getType(uri); // Obtenha o tipo MIME corretamente
                 formData.append('imagem', {
                     uri,
-                    name: `fotoPerfil.${fileType}`, // Nome do arquivo
-                    type: `image/${fileType}`, // Tipo MIME
+                    name: `fotoPerfil.${fileType.split('/').pop()}`, // Nome do arquivo com a extensão
+                    type: fileType, // Tipo MIME correto
                 });
             }
-            await httpClient.put(`/Usuario/Atualizar`, formData).then((response) => {
-                console.log(response)
-            });
-            setUser(editUser);
-            setIsEditing(false); 
-            Alert.alert('Sucesso', 'Dados do usuário atualizados com sucesso.');
+
+            httpClient.put(`/Usuario/Atualizar`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+                .then(response => {
+                    setUser(editUser);
+                    setIsEditing(false);
+                    Alert.alert('Sucesso', 'Dados do usuário atualizados com sucesso.');
+                    handleGetUser();
+                })
+                .catch(error => {
+                    Alert.alert('Erro', 'Não foi possível atualizar os dados do usuário. Tente novamente.');
+                })
+                .finally(() => setLoading(false));
+
         } catch (error) {
+            setLoading(false);
             Alert.alert('Erro', 'Não foi possível atualizar os dados do usuário. Tente novamente.');
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -137,12 +155,20 @@ const Perfil = ({ navigation }) => {
             </View>
             <View style={{ flex: 1, backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-around", alignItems: "center" }}>
                 <View style={stylesLocal.profileSection}>
-                    <TouchableOpacity onPress={selecionarImagem} style={{ bottom: 120, position: 'absolute' }}>
+                    {isEditing ?
+                        <TouchableOpacity onPress={selecionarImagem} style={{ bottom: 120, position: 'absolute' }}>
+                            <Image
+                                style={{ ...stylesLocal.profileImage, }}
+                                source={{ uri: fotoPerfil ?? user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
+                            />
+                        </TouchableOpacity>
+                        :
                         <Image
-                            style={{ ...stylesLocal.profileImage, }}
+                            style={{ ...stylesLocal.profileImage, bottom: 80, position: 'absolute' }}
                             source={{ uri: user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
                         />
-                    </TouchableOpacity>
+                    }
+
                     {isEditing ? (
                         <View style={{ position: 'relative', top: 55, alignItems: 'center', width: "80%" }}>
                             <TextInput
@@ -187,9 +213,15 @@ const Perfil = ({ navigation }) => {
                 </View>
 
                 {isEditing ? (
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={handleEditUser}>
-                        <Text style={styles.buttonText}>Salvar Alterações</Text>
-                    </TouchableOpacity>
+                    loading
+                        ?
+                        <View style={{ ...styles.button, backgroundColor: "#00C1CF" }}>
+                            <ActivityIndicator size="large" color="#fff" />
+                        </View>
+                        :
+                        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={handleEditUser}>
+                            <Text style={styles.buttonText}>Salvar Alterações</Text>
+                        </TouchableOpacity>
                 ) : (
                     <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={() => setIsEditing(true)}>
                         <Text style={styles.buttonText}>Editar Perfil</Text>

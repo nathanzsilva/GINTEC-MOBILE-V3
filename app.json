@@ -27,8 +27,7 @@
       "aps-environment": "production"
     }
   },
-  "android": {
-    "googleServicesFile": "./google-services.json",
+  "android": {    
     "package": "com.etec.gintec",
     "versionCode": 4
   },

@@ -21,9 +21,7 @@ const CampeonatoP = ({ navigation, route }) => {
     }
 
     const renderPhases = ({ item }) => {
-        var userCode = async () => await AsyncStorage.getItem("usuarioCodigo")
-
-        var date = new Date(item.dataGincana);
+        var userCode = async () => await AsyncStorage.getItem("usuarioCodigo")        
         var jogos = item.jogos;
         var feita = []
         if(jogos){

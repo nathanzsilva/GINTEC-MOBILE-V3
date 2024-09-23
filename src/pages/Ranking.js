@@ -11,29 +11,11 @@ const Ranking = ({ navigation }) => {
         handleGetRanking();
     }, [])
 
-    const handleGetRanking = async () => {
-        httpClient.get("/Usuario/ObterPontuacaoGeral").then((response) => {
-            setRankingStudents(response.data);
+    const handleGetRanking = () => {
+        httpClient.post("/Sala/Ranking").then((response) => {
 
-            const turmaPontuacaoGeral = response.data.reduce((acc, student) => {
-                const turma = student.turma;
-                const pontuacaoGeral = student.pontos.pontuacaGeral;
-
-
-                if (acc[turma])
-                    acc[turma] += pontuacaoGeral;
-                else
-                    acc[turma] = pontuacaoGeral;
-
-
-                return acc;
-            }, {});
-
-            setRanking(Object.entries(turmaPontuacaoGeral).map(([turma, pontuacaoGeral], index) => ({
-                position: index + 1,
-                turma,
-                pontuacaoGeral
-            })).slice(0, 10));            
+            console.log(response.data)
+            setRanking((response.data ?? []).slice(0, 10));
         })
     }
     return (
@@ -51,20 +33,20 @@ const Ranking = ({ navigation }) => {
                     <View style={style.rankingItem2}>
                         <Text style={style.rankTitle}>2º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 70, height: 70, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>{ranking[1]?.turma}</Text>
-                        <Text style={style.rankPoints}>{ranking[1]?.pontuacaoGeral}</Text>
+                        <Text style={style.rankName}>{ranking[1]?.descricao}</Text>
+                        <Text style={style.rankPoints}>{ranking[1]?.pontuacao}</Text>
                     </View>
                     <View style={style.rankingItem1}>
                         <Text style={style.rankTitle}>1º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 90, height: 90, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>{ranking[0]?.turma}</Text>
-                        <Text style={style.rankPoints}>{ranking[0]?.pontuacaoGeral}</Text>
+                        <Text style={style.rankName}>{ranking[0]?.descricao}</Text>
+                        <Text style={style.rankPoints}>{ranking[0]?.pontuacao}</Text>
                     </View>
                     <View style={style.rankingItem3}>
                         <Text style={style.rankTitle}>3º Lugar</Text>
                         <View style={{ backgroundColor: "white", width: 70, height: 70, borderRadius: 100 }}></View>
-                        <Text style={style.rankName}>{ranking[2]?.turma}</Text>
-                        <Text style={style.rankPoints}>{ranking[2]?.pontuacaoGeral}</Text>
+                        <Text style={style.rankName}>{ranking[2]?.descricao}</Text>
+                        <Text style={style.rankPoints}>{ranking[2]?.pontuacao}</Text>
                     </View>
                 </View>
                 <View style={{ flex: 1, marginTop: -10, backgroundColor: "#fff", borderTopLeftRadius: 20, borderTopRightRadius: 20, justifyContent: "space-around", alignItems: "center", }}>
@@ -77,21 +59,21 @@ const Ranking = ({ navigation }) => {
                         contentContainerStyle={{
                             paddingBottom: 90
                         }}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
 
                             return (
                                 <View style={{ marginVertical: 10, width: "100%", paddingHorizontal: 60, display: "flex", flexDirection: "row", alignItems: "center" }}>
-                                    <View style={{width: 30}}>
-                                        <Text style={styles.itemText}>{item.position}º </Text>
+                                    <View style={{ width: 30 }}>
+                                        <Text style={styles.itemText}>{index + 1}º </Text>
                                     </View>
 
-                                    <View style={{ backgroundColor: "grey", width: 30, height: 30, borderRadius: 100 , marginRight: 10}}></View>
+                                    <View style={{ backgroundColor: "grey", width: 30, height: 30, borderRadius: 100, marginRight: 10 }}></View>
                                     <View style={{ width: 150 }}>
-                                        <Text style={styles.itemText}>{item.turma}</Text>
+                                        <Text style={styles.itemText}>{item.descricao}</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", alignItems: 'center' }}>
                                         <Image source={require("../../assets/estrela.png")} style={{ height: 15, width: 15 }} />
-                                        <Text style={styles.itemPoints}>{item.pontuacaoGeral}</Text>
+                                        <Text style={styles.itemPoints}>{item.pontuacao}</Text>
                                     </View>
                                 </View>
                             )
