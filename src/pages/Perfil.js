@@ -144,97 +144,95 @@ const Perfil = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={{height: "100vh"}}>
-            <ImageBackground source={require("../../assets/perfilbg.png")} style={styles.backgroundImage} >
-                <View style={{ marginTop: 80 }}>
-                    <TouchableOpacity onPress={() => { navigation.navigate("Home") }}>
-                        <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
-                    </TouchableOpacity>
-                    <View style={{ height: 150, marginBottom: 30, justifyContent: "flex-start", alignSelf: "flex-start", width: "100%", alignItems: "center" }}>
-                        <Text style={{ ...styles.title, color: "white" }}>Seu Perfil</Text>
-                    </View>
+        <ImageBackground source={require("../../assets/perfilbg.png")} style={styles.backgroundImage} >
+            <View style={{ marginTop: 80 }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("Home") }}>
+                    <Image source={require("../../assets/voltar.png")} style={styles.voltar} />
+                </TouchableOpacity>
+                <View style={{ height: 150, marginBottom: 30, justifyContent: "flex-start", alignSelf: "flex-start", width: "100%", alignItems: "center" }}>
+                    <Text style={{ ...styles.title, color: "white" }}>Seu Perfil</Text>
                 </View>
-                <View style={{ flex: 1, backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-around", alignItems: "center" }}>
-                    <View style={stylesLocal.profileSection}>
-                        {isEditing ?
-                            <TouchableOpacity onPress={selecionarImagem} style={{ bottom: 120, position: 'absolute' }}>
-                                <Image
-                                    style={{ ...stylesLocal.profileImage, }}
-                                    source={{ uri: fotoPerfil ?? user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
-                                />
-                            </TouchableOpacity>
-                            :
+            </View>
+            <View style={{ flex: 1, backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40, justifyContent: "space-around", alignItems: "center" }}>
+                <View style={stylesLocal.profileSection}>
+                    {isEditing ?
+                        <TouchableOpacity onPress={selecionarImagem} style={{ bottom: 120, position: 'absolute' }}>
                             <Image
-                                style={{ ...stylesLocal.profileImage, bottom: 80, position: 'absolute' }}
-                                source={{ uri: user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
+                                style={{ ...stylesLocal.profileImage, }}
+                                source={{ uri: fotoPerfil ?? user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
                             />
-                        }
-
-                        {isEditing ? (
-                            <View style={{ position: 'relative', top: 55, alignItems: 'center', width: "80%" }}>
-                                <TextInput
-                                    style={{ ...stylesLocal.input }}
-                                    value={editUser.email}
-                                    onChangeText={(text) => setEditUser({ ...editUser, email: text })}
-                                />
-                                <TextInput
-                                    style={stylesLocal.input}
-                                    value={editUser.senha}
-                                    onChangeText={(text) => setEditUser({ ...editUser, senha: text })}
-                                />
-                                <TextInput
-                                    style={stylesLocal.input}
-                                    value={editUser.confsenha?.toString()}
-                                    onChangeText={(text) => setEditUser({ ...editUser, confsenha: text })}
-                                />
-                            </View>
-                        ) : (
-                            <>
-                                <Text style={stylesLocal.profileName}>{user?.nome}</Text>
-                                <Text style={stylesLocal.profileDetail}>{user?.sala?.serie}° {user?.sala?.descricao}</Text>
-                                <Text style={stylesLocal.profileDetail}>RM: {user?.rm}</Text>
-                            </>
-                        )}
-                    </View>
-                    <View style={{ flexDirection: 'row', width: "90%", justifyContent: 'space-between', marginVertical: 20, backgroundColor: "#005C6D", paddingHorizontal: 15, paddingVertical: 30, borderRadius: 30 }}>
-                        <View style={stylesLocal.metric}>
-                            <Text style={stylesLocal.metricTitle}>Pontuação Total</Text>
-                            <Text style={stylesLocal.metricValue}>{allPoints}</Text>
-                        </View>
-                        <View style={{ width: 2, height: "100%", borderColor: "#fff", borderWidth: 1 }} />
-                        <View style={stylesLocal.metric}>
-                            <Text style={stylesLocal.metricTitle}>Pontuação Média</Text>
-                            <Text style={stylesLocal.metricValue}>{averagePoints}</Text>
-                        </View>
-                        <View style={{ width: 2, height: "100%", borderColor: "#fff", borderWidth: 1 }} />
-                        <View style={stylesLocal.metric}>
-                            <Text style={stylesLocal.metricTitle}>Pontuação do dia</Text>
-                            <Text style={stylesLocal.metricValue}>{todayPoints}</Text>
-                        </View>
-                    </View>
+                        </TouchableOpacity>
+                        :
+                        <Image
+                            style={{ ...stylesLocal.profileImage, bottom: 80, position: 'absolute' }}
+                            source={{ uri: user.fotoPerfil ?? 'https://via.placeholder.com/100' }}
+                        />
+                    }
 
                     {isEditing ? (
-                        loading
-                            ?
-                            <View style={{ ...styles.button, backgroundColor: "#00C1CF" }}>
-                                <ActivityIndicator size="large" color="#fff" />
-                            </View>
-                            :
-                            <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={handleEditUser}>
-                                <Text style={styles.buttonText}>Salvar Alterações</Text>
-                            </TouchableOpacity>
+                        <View style={{ position: 'relative', top: 55, alignItems: 'center', width: "80%" }}>
+                            <TextInput
+                                style={{ ...stylesLocal.input }}
+                                value={editUser.email}
+                                onChangeText={(text) => setEditUser({ ...editUser, email: text })}
+                            />
+                            <TextInput
+                                style={stylesLocal.input}
+                                value={editUser.senha}
+                                onChangeText={(text) => setEditUser({ ...editUser, senha: text })}
+                            />
+                            <TextInput
+                                style={stylesLocal.input}
+                                value={editUser.confsenha?.toString()}
+                                onChangeText={(text) => setEditUser({ ...editUser, confsenha: text })}
+                            />
+                        </View>
                     ) : (
-                        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={() => setIsEditing(true)}>
-                            <Text style={styles.buttonText}>Editar Perfil</Text>
-                        </TouchableOpacity>
+                        <>
+                            <Text style={stylesLocal.profileName}>{user?.nome}</Text>
+                            <Text style={stylesLocal.profileDetail}>{user?.sala?.serie}° {user?.sala?.descricao}</Text>
+                            <Text style={stylesLocal.profileDetail}>RM: {user?.rm}</Text>
+                        </>
                     )}
-
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#B20000" }} onPress={handleLogOut}>
-                        <Text style={styles.buttonText}>Sair da conta</Text>
-                    </TouchableOpacity>
                 </View>
-            </ImageBackground>
-        </SafeAreaView>
+                <View style={{ flexDirection: 'row', width: "90%", justifyContent: 'space-between', marginVertical: 20, backgroundColor: "#005C6D", paddingHorizontal: 15, paddingVertical: 30, borderRadius: 30 }}>
+                    <View style={stylesLocal.metric}>
+                        <Text style={stylesLocal.metricTitle}>Pontuação Total</Text>
+                        <Text style={stylesLocal.metricValue}>{allPoints}</Text>
+                    </View>
+                    <View style={{ width: 2, height: "100%", borderColor: "#fff", borderWidth: 1 }} />
+                    <View style={stylesLocal.metric}>
+                        <Text style={stylesLocal.metricTitle}>Pontuação Média</Text>
+                        <Text style={stylesLocal.metricValue}>{averagePoints}</Text>
+                    </View>
+                    <View style={{ width: 2, height: "100%", borderColor: "#fff", borderWidth: 1 }} />
+                    <View style={stylesLocal.metric}>
+                        <Text style={stylesLocal.metricTitle}>Pontuação do dia</Text>
+                        <Text style={stylesLocal.metricValue}>{todayPoints}</Text>
+                    </View>
+                </View>
+
+                {isEditing ? (
+                    loading
+                        ?
+                        <View style={{ ...styles.button, backgroundColor: "#00C1CF" }}>
+                            <ActivityIndicator size="large" color="#fff" />
+                        </View>
+                        :
+                        <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={handleEditUser}>
+                            <Text style={styles.buttonText}>Salvar Alterações</Text>
+                        </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#00C1CF" }} onPress={() => setIsEditing(true)}>
+                        <Text style={styles.buttonText}>Editar Perfil</Text>
+                    </TouchableOpacity>
+                )}
+
+                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#B20000" }} onPress={handleLogOut}>
+                    <Text style={styles.buttonText}>Sair da conta</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
     );
 };
 
